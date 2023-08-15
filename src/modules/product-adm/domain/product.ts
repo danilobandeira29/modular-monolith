@@ -20,12 +20,24 @@ export default class Product extends Entity implements AggregateRoot {
         return this._name;
     }
 
+    set name(n: string) {
+        this._name = n;
+    }
+
     get description() {
         return this._description;
     }
 
+    set description(d: string) {
+        this._description = d;
+    }
+
     get purchasePrice() {
         return this._purchasePrice
+    }
+
+    set purchasePrice(p: number) {
+        this._purchasePrice = p;
     }
 
     get stock() {

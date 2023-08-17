@@ -1,8 +1,6 @@
 import {Sequelize} from "sequelize-typescript";
 import {ProductModel} from "../repository/product.model";
-import ProductRepository from "../repository/product.repository";
-import AddProductUseCase from "../usecase/add-product.usecase";
-import ProductAdmFacade from "./product-adm.facade";
+import ProductAdmFactoryFacade from "../factory/product-adm.factory.facade";
 
 describe("Product Adm Facade Integration Tests", function () {
     let sequelize: Sequelize;
@@ -23,9 +21,7 @@ describe("Product Adm Facade Integration Tests", function () {
     });
 
     it("should create a product passing a id", async () => {
-        const repo = new ProductRepository();
-        const addProductUseCase = new AddProductUseCase(repo);
-        const facade = new ProductAdmFacade({ addProduct: addProductUseCase });
+        const facade = ProductAdmFactoryFacade.create()
         const result = await facade.addProduct(
             {
                 id: "1234",
@@ -47,9 +43,7 @@ describe("Product Adm Facade Integration Tests", function () {
     })
 
     it("should create a product without passing a id", async () => {
-        const repo = new ProductRepository();
-        const addProductUseCase = new AddProductUseCase(repo);
-        const facade = new ProductAdmFacade({ addProduct: addProductUseCase });
+        const facade = ProductAdmFactoryFacade.create();
         const result = await facade.addProduct(
             {
                 description: "Product description",

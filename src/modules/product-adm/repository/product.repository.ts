@@ -9,6 +9,7 @@ export default class ProductRepository implements ProductGateway {
             name: product.name,
             description: product.description,
             stock: product.stock,
+            purchasePrice: product.purchasePrice,
             createdAt: new Date(),
             updatedAt: new Date()
         })

@@ -1,5 +1,5 @@
 import ProductRepository from "../repository/product.repository";
-import AddProductUseCase from "../usecase/add-product.usecase";
+import AddProductUseCase from "../usecase/add-product/add-product.usecase";
 import ProductAdmFacade from "../facade/product-adm.facade";
 
 export default class ProductAdmFactoryFacade {

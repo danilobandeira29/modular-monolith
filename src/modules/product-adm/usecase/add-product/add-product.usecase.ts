@@ -1,7 +1,7 @@
 import {InputProductDto, OutputProductDto} from "./add-product.dto";
-import {ProductGateway} from "../gateway/product.gateway";
-import Product from "../domain/product";
-import Id from "../../@shared/domain/value-object/id-object";
+import {ProductGateway} from "../../gateway/product.gateway";
+import Product from "../../domain/product";
+import Id from "../../../@shared/domain/value-object/id-object";
 
 export default class AddProductUseCase {
     constructor(private readonly repo: ProductGateway) {}

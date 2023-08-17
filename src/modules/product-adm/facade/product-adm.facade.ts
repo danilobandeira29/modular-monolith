@@ -5,7 +5,7 @@ import {
     OutputCheckStockProductAdmFacade,
     ProductAdmFacadeInterface
 } from "./product-adm.facade.interface";
-import AddProductUseCase from "../usecase/add-product.usecase";
+import AddProductUseCase from "../usecase/add-product/add-product.usecase";
 
 export default class ProductAdmFacade implements ProductAdmFacadeInterface {
     constructor(private readonly useCases: { addProduct: AddProductUseCase,  }) {}

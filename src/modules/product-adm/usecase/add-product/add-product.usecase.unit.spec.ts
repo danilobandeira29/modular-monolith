@@ -1,5 +1,5 @@
 import AddProductUseCase from "./add-product.usecase";
-import {ProductGateway} from "../gateway/product.gateway";
+import {ProductGateway} from "../../gateway/product.gateway";
 
 describe("Add Product UseCase Unit test", () => {
     it("should add a Product", async() => {

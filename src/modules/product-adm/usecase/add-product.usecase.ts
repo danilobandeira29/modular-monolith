@@ -8,7 +8,7 @@ export default class AddProductUseCase {
 
     async execute(input: InputProductDto): Promise<OutputProductDto> {
         const product = new Product({
-            id: new Id(),
+            id: new Id(input.id),
             name: input.name,
             description: input.description,
             stock: input.stock,
@@ -20,7 +20,9 @@ export default class AddProductUseCase {
             name: product.name,
             purchasePrice: product.purchasePrice,
             description: product.description,
-            stock: product.stock
+            stock: product.stock,
+            createdAt: product.createdAt,
+            updatedAt: product.updateAt
         };
     }
 }

@@ -20,7 +20,7 @@ export default class ProductRepository implements ProductGateway {
         const model = await ProductModel.findByPk(id);
         if (!model) {
             throw new Error("Product not found");
-        };
+        }
         return new Product(
             {
                 id: new Id(model.id),

@@ -16,7 +16,9 @@ describe("Add Product UseCase Unit test", () => {
             name: "Product",
             description: "Description Product",
             purchasePrice: 400,
-            stock: 20
+            stock: 20,
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date)
         })
     })
 })

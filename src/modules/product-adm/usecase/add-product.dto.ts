@@ -1,4 +1,5 @@
 export interface InputProductDto {
+    id?: string;
     name: string;
     description: string;
     purchasePrice: number;
@@ -11,4 +12,6 @@ export interface OutputProductDto {
     description: string;
     purchasePrice: number;
     stock: number;
+    createdAt: Date;
+    updatedAt: Date;
 }

@@ -6,9 +6,10 @@ import {
     ProductAdmFacadeInterface
 } from "./product-adm.facade.interface";
 import AddProductUseCase from "../usecase/add-product/add-product.usecase";
+import CheckStockUseCase from "../usecase/check-stock/check-stock.usecase";
 
 export default class ProductAdmFacade implements ProductAdmFacadeInterface {
-    constructor(private readonly useCases: { addProduct: AddProductUseCase,  }) {}
+    constructor(private readonly useCases: { addProduct: AddProductUseCase, checkStock: CheckStockUseCase }) {}
 
     async addProduct(ctx: InputAddProductAdmFacade): Promise<OutputAddProductAdmFacade> {
         // caso o dto de output da facade fosse diferente do dto de output do caso de uso, devia converter aqui
@@ -23,7 +24,7 @@ export default class ProductAdmFacade implements ProductAdmFacadeInterface {
     }
 
     checkStock(ctx: InputCheckStockProductAdmFacade): Promise<OutputCheckStockProductAdmFacade> {
-        return Promise.resolve({} as any);
+        return this.useCases.checkStock.execute(ctx);
     }
 
 }

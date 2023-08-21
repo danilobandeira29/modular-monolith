@@ -62,4 +62,22 @@ describe("Product Adm Facade Integration Tests", function () {
             updatedAt: expect.any(Date),
         })
     })
+
+    it("should check stock", async () => {
+        const facade = ProductAdmFactoryFacade.create();
+        await facade.addProduct(
+            {
+                id: "123",
+                description: "Product description",
+                purchasePrice: 444,
+                stock: 2,
+                name: "Product name"
+            }
+        )
+        const result = await facade.checkStock({ productId: "123" });
+        expect(result).toStrictEqual({
+            productId: "123",
+            stock: 2
+        })
+    })
 });

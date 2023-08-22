@@ -19,11 +19,11 @@ export default class Entity {
         return this._createdAt;
     }
 
-    get updateAt() {
+    get updatedAt() {
         return this._updatedAt;
     }
 
-    set updateAt(d: Date) {
+    set updatedAt(d: Date) {
         this._updatedAt = d;
     }
 }

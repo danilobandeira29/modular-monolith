@@ -15,7 +15,7 @@ export default class AddClientUseCase {
             address: client.address,
             email: client.email,
             createdAt: client.createdAt,
-            updatedAt: client.updateAt
+            updatedAt: client.updatedAt
         };
     }
 }

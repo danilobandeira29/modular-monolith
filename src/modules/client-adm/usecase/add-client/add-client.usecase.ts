@@ -7,7 +7,7 @@ export default class AddClientUseCase {
     constructor(private readonly repo: ClientGateway) {}
 
     async execute(input: InputAddClient): Promise<OutputAddClient> {
-        const client = new Client({ email: input.email, address: input.address, name: input.name, id: new Id() });
+        const client = new Client({ email: input.email, address: input.address, name: input.name, id: new Id(input.id) });
         this.repo.add(client).catch((e) => console.error(e));
         return {
             id: client.id.toString(),

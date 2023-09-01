@@ -1,4 +1,4 @@
-RUNNING THE PROJECT:
+# RUNNING THE PROJECT:
 
 ```bash
 docker build -t <put_image_name_here> .

@@ -1,6 +1,6 @@
 RUNNING THE PROJECT:
 
 ```bash
-docker build -t modular-monolith .
-docker run -it modular-monolith
+docker build -t <put_image_name_here> .
+docker run -it <put_image_name_here>
 ```

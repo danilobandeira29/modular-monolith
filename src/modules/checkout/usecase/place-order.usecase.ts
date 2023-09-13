@@ -13,9 +13,15 @@ export default class PlaceOrderUseCase {
         if (!input.products.length) {
             throw new Error("Products should be in Stock and Price greater than zero");
         }
-        const product = await this.facades.productAdm.checkStock({ productId: input.products[0].productId });
-        if (!product.stock) {
-            throw new Error(`The Product: ${product.productId} must be in Stock`);
+        const products = await Promise.all(input.products.map(p =>
+            this.facades.productAdm.checkStock({ productId: p.productId })
+        ))
+        const productsOutStock = products.reduce((acc, p) => {
+            if (!p.stock) acc.push(p.productId);
+            return acc;
+        }, [] as Array<string>);
+        if (productsOutStock.length) {
+            throw new Error(`The Products: ${products.join(', ')} must be in Stock`);
         }
         return {} as any;
         // validar todos os produtos que estao sendo passados(podem vir com 0, verificar stock e afins)

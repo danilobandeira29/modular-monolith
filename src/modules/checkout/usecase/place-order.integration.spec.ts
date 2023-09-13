@@ -52,8 +52,14 @@ describe("Place Order Integration Tests", () => {
         const productAdm = ProductAdmFactoryFacade.create();
         const useCase = new PlaceOrderUseCase({ clientAdm, productAdm });
         const productId = new Id().toString();
+        const productId2 = new Id().toString();
+        const productId3 = new Id().toString();
+        const productId4 = new Id().toString();
         await productAdm.addProduct({ id: productId, name: '', stock: 0, purchasePrice: 100, description: '' });
-        await expect((() => useCase.execute({ clientId: clientId, products: [{ productId }] }))).rejects.toThrowError(/must be in Stock/);
+        await productAdm.addProduct({ id: productId2, name: '', stock: 0, purchasePrice: 100, description: '' });
+        await productAdm.addProduct({ id: productId3, name: '', stock: 0, purchasePrice: 100, description: '' });
+        await productAdm.addProduct({ id: productId4, name: '', stock: 0, purchasePrice: 100, description: '' });
+        await expect((() => useCase.execute({ clientId: clientId, products: [{ productId }, { productId: productId2 }, { productId: productId3 }, { productId: productId4 }] }))).rejects.toThrowError(/must be in Stock/);
     })
 
 })

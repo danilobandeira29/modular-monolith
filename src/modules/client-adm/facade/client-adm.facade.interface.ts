@@ -5,7 +5,7 @@ export interface InputAddClientFacade {
     id?: string;
 }
 
-export interface OutputFindClientFacade {
+export type OutputFindClientFacade = null | {
     id: string;
     name: string;
     email: string;
@@ -16,5 +16,5 @@ export interface OutputFindClientFacade {
 
 export interface ClientAdmFacadeInterface {
     addClient(input: InputAddClientFacade): Promise<void>;
-    find(input: { id: string }): Promise<OutputFindClientFacade>;
+    find(input: { id: string }): Promise<OutputFindClientFacade | null>;
 }

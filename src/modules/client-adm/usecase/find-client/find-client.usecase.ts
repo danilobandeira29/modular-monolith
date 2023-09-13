@@ -6,6 +6,9 @@ export default class FindClientUseCase {
 
     async execute(input: InputFindClient): Promise<OutputFindClient> {
         const client = await this.repo.find({ id: input.id });
+        if(!client) {
+            return null
+        }
         return {
             id: input.id.toString(),
             name: client.name,

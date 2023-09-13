@@ -2,7 +2,7 @@ export interface InputFindClient {
     id: string;
 }
 
-export interface OutputFindClient {
+export type OutputFindClient = null | {
     id: string;
     name: string;
     address: string;

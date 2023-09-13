@@ -31,12 +31,12 @@ describe("Client Adm Facade Integration Tests", () => {
         })
         const repo = new ClientRepository();
         const result = await repo.find({ id: "1" });
-        expect(result.id.toString()).toStrictEqual("1");
-        expect(result.name).toStrictEqual("Client Name");
-        expect(result.address).toStrictEqual("Address");
-        expect(result.email).toStrictEqual("email@email.com");
-        expect(result.createdAt).toBeInstanceOf(Date);
-        expect(result.updatedAt).toBeInstanceOf(Date);
+        expect(result!.id.toString()).toStrictEqual("1");
+        expect(result!.name).toStrictEqual("Client Name");
+        expect(result!.address).toStrictEqual("Address");
+        expect(result!.email).toStrictEqual("email@email.com");
+        expect(result!.createdAt).toBeInstanceOf(Date);
+        expect(result!.updatedAt).toBeInstanceOf(Date);
     })
 
     it("should find a Client", async () => {
@@ -48,11 +48,11 @@ describe("Client Adm Facade Integration Tests", () => {
             address: "Address"
         })
         const result = await facade.find({ id: "1" });
-        expect(result.id.toString()).toStrictEqual("1");
-        expect(result.name).toStrictEqual("Client Name");
-        expect(result.address).toStrictEqual("Address");
-        expect(result.email).toStrictEqual("email@email.com");
-        expect(result.createdAt).toBeInstanceOf(Date);
-        expect(result.updatedAt).toBeInstanceOf(Date);
+        expect(result!.id.toString()).toStrictEqual("1");
+        expect(result!.name).toStrictEqual("Client Name");
+        expect(result!.address).toStrictEqual("Address");
+        expect(result!.email).toStrictEqual("email@email.com");
+        expect(result!.createdAt).toBeInstanceOf(Date);
+        expect(result!.updatedAt).toBeInstanceOf(Date);
     })
 })

@@ -4,7 +4,7 @@ import { Column, Model, PrimaryKey, Table } from "sequelize-typescript";
     tableName: "products",
     timestamps: false,
 })
-export default class ProductModel extends Model {
+export class ProductCatalogModel extends Model {
     @PrimaryKey
     @Column({ allowNull: false })
     declare     id: string;
@@ -15,6 +15,7 @@ export default class ProductModel extends Model {
     @Column({ allowNull: false })
     declare     description: string;
 
-    @Column({ allowNull: false })
+    // @TODO: salesPrice maybe is different of purchasePrice. you should create another column or table to handler this
+    @Column({ allowNull: false, field: 'purchasePrice' })
     declare     salesPrice: number;
 }

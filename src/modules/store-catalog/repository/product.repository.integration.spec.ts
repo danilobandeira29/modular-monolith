@@ -1,5 +1,5 @@
 import {Sequelize} from "sequelize-typescript";
-import ProductModel from "../repository/product.model";
+import { ProductCatalogModel } from "./product-catalog.model";
 import ProductRepository from "./product.repository";
 
 describe("Product Repository Integration tests", () => {
@@ -12,7 +12,7 @@ describe("Product Repository Integration tests", () => {
             logging: false,
             sync: { force: true },
         });
-        await sequelize.addModels([ProductModel]);
+        await sequelize.addModels([ProductCatalogModel]);
         await sequelize.sync();
     });
 
@@ -21,13 +21,13 @@ describe("Product Repository Integration tests", () => {
     });
 
     it("should find all products", async() => {
-        const model = await ProductModel.create({
+        const model = await ProductCatalogModel.create({
             id: "1234",
             name: "Product Name",
             description: "Product description",
             salesPrice: 44
         });
-        const model2 = await ProductModel.create({
+        const model2 = await ProductCatalogModel.create({
             id: "4444",
             name: "Product Name 2",
             description: "Product description 2",
@@ -46,7 +46,7 @@ describe("Product Repository Integration tests", () => {
     })
 
     it("should find products", async() => {
-        const model = await ProductModel.create({
+        const model = await ProductCatalogModel.create({
             id: "1234",
             name: "Product Name",
             description: "Product description",
@@ -58,6 +58,5 @@ describe("Product Repository Integration tests", () => {
         expect(product.name).toStrictEqual(model.name);
         expect(product.description).toStrictEqual(model.description);
         expect(product.salesPrice).toStrictEqual(model.salesPrice);
-
     })
 })

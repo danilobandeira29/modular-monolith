@@ -4,6 +4,8 @@ import ClientAdmFacadeFactory from "../../client-adm/factory/client-adm.facade.f
 import Id from "../../@shared/domain/value-object/id-object";
 import PlaceOrderUseCase from "./place-order.usecase";
 import ProductAdmFactoryFacade from "../../product-adm/factory/product-adm.factory.facade";
+import { ProductCatalogModel as ProductCatalogModel } from "../../store-catalog/repository/product-catalog.model";
+import StoreCatalogFactoryFacade from "../../store-catalog/factory/store-catalog.factory";
 import {ProductModel} from "../../product-adm/repository/product.model";
 
 describe("Place Order Integration Tests", () => {
@@ -16,7 +18,7 @@ describe("Place Order Integration Tests", () => {
             logging: false,
             sync: { force: true },
         });
-        await sequelize.addModels([ClientModel, ProductModel]);
+        sequelize.addModels([ClientModel, ProductCatalogModel, ProductModel]);
         await sequelize.sync();
     });
 
@@ -31,7 +33,8 @@ describe("Place Order Integration Tests", () => {
         const productAdm = ProductAdmFactoryFacade.create();
         const productId = new Id().toString();
         await productAdm.addProduct({ id: productId, name: '', stock: 1, purchasePrice: 100, description: '' });
-        const useCase = new PlaceOrderUseCase({ clientAdm, productAdm });
+        const storeCatalogAdm = StoreCatalogFactoryFacade.create();
+        const useCase = new PlaceOrderUseCase({ clientAdm, productAdm, storeCatalogAdm });
         const result = await useCase.execute({ clientId: clientId, products: [{productId}] });
         expect(result).toStrictEqual({});
     })
@@ -41,7 +44,8 @@ describe("Place Order Integration Tests", () => {
         const clientId = new Id().toString();
         await clientAdm.addClient({ id: clientId, name: 'Danilo Bandeira', email: 'email@email.com', address: 'address' });
         const productAdm = ProductAdmFactoryFacade.create();
-        const useCase = new PlaceOrderUseCase({ clientAdm, productAdm });
+        const storeCatalogAdm = StoreCatalogFactoryFacade.create();
+        const useCase = new PlaceOrderUseCase({ clientAdm, productAdm, storeCatalogAdm });
         await expect((() => useCase.execute({ clientId: clientId, products: [] }))).rejects.toThrowError("Products should be in Stock and Price greater than zero");
     })
 
@@ -50,7 +54,8 @@ describe("Place Order Integration Tests", () => {
         const clientId = new Id().toString();
         await clientAdm.addClient({ id: clientId, name: 'Danilo Bandeira', email: 'email@email.com', address: 'address' });
         const productAdm = ProductAdmFactoryFacade.create();
-        const useCase = new PlaceOrderUseCase({ clientAdm, productAdm });
+        const storeCatalogAdm = StoreCatalogFactoryFacade.create();
+        const useCase = new PlaceOrderUseCase({ clientAdm, productAdm, storeCatalogAdm });
         const productId = new Id().toString();
         const productId2 = new Id().toString();
         const productId3 = new Id().toString();

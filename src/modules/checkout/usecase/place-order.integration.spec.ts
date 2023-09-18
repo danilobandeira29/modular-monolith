@@ -7,6 +7,9 @@ import ProductAdmFactoryFacade from "../../product-adm/factory/product-adm.facto
 import { ProductCatalogModel as ProductCatalogModel } from "../../store-catalog/repository/product-catalog.model";
 import StoreCatalogFactoryFacade from "../../store-catalog/factory/store-catalog.factory";
 import {ProductModel} from "../../product-adm/repository/product.model";
+import PaymentFactory from "../../payment/factory/payment.factory";
+import InvoiceRepository from "../../invoice/repository/invoice.repository";
+import OrderRepository from "../repository/order.repository";
 
 describe("Place Order Integration Tests", () => {
     let sequelize: Sequelize;
@@ -29,12 +32,15 @@ describe("Place Order Integration Tests", () => {
     it("should place a order", async () => {
         const clientAdm = ClientAdmFacadeFactory.create();
         const clientId = new Id().toString();
-        await clientAdm.addClient({ id: clientId, name: 'Danilo Bandeira', email: 'email@email.com', address: 'address' });
+        await clientAdm.addClient({ id: clientId, document: '1' ,name: 'Danilo Bandeira', email: 'email@email.com', address: { street: 'street', zipCode: '1', number: '1', state: 'state', complement: 'complement', city: 'city' } });
         const productAdm = ProductAdmFactoryFacade.create();
         const productId = new Id().toString();
         await productAdm.addProduct({ id: productId, name: '', stock: 1, purchasePrice: 100, description: '' });
         const storeCatalogAdm = StoreCatalogFactoryFacade.create();
-        const useCase = new PlaceOrderUseCase({ clientAdm, productAdm, storeCatalogAdm });
+        const payment = PaymentFactory.create();
+        const invoice = new InvoiceRepository();
+        const order = new OrderRepository();
+        const useCase = new PlaceOrderUseCase({ clientAdm, productAdm, storeCatalogAdm, payment, invoice, order });
         const result = await useCase.execute({ clientId: clientId, products: [{productId}] });
         expect(result).toStrictEqual({});
     })
@@ -42,20 +48,26 @@ describe("Place Order Integration Tests", () => {
     it("should throw errors when products are empty", async () => {
         const clientAdm = ClientAdmFacadeFactory.create();
         const clientId = new Id().toString();
-        await clientAdm.addClient({ id: clientId, name: 'Danilo Bandeira', email: 'email@email.com', address: 'address' });
+        await clientAdm.addClient({ id: clientId, document:'1',name: 'Danilo Bandeira', email: 'email@email.com', address: { street: 'street', zipCode: '1', number: '1', state: 'state', complement: 'complement', city: 'city' } });
         const productAdm = ProductAdmFactoryFacade.create();
         const storeCatalogAdm = StoreCatalogFactoryFacade.create();
-        const useCase = new PlaceOrderUseCase({ clientAdm, productAdm, storeCatalogAdm });
+        const payment = PaymentFactory.create();
+        const invoice = new InvoiceRepository();
+        const order = new OrderRepository();
+        const useCase = new PlaceOrderUseCase({ clientAdm, productAdm, storeCatalogAdm, payment, invoice, order });
         await expect((() => useCase.execute({ clientId: clientId, products: [] }))).rejects.toThrowError("Products should be in Stock and Price greater than zero");
     })
 
     it("should throw errors when products are not in Stock", async () => {
         const clientAdm = ClientAdmFacadeFactory.create();
         const clientId = new Id().toString();
-        await clientAdm.addClient({ id: clientId, name: 'Danilo Bandeira', email: 'email@email.com', address: 'address' });
+        await clientAdm.addClient({ id: clientId, document: '1', name: 'Danilo Bandeira', email: 'email@email.com', address: { street: 'street', zipCode: '1', number: '1', state: 'state', complement: 'complement', city: 'city' } });
         const productAdm = ProductAdmFactoryFacade.create();
         const storeCatalogAdm = StoreCatalogFactoryFacade.create();
-        const useCase = new PlaceOrderUseCase({ clientAdm, productAdm, storeCatalogAdm });
+        const payment = PaymentFactory.create();
+        const invoice = new InvoiceRepository();
+        const order = new OrderRepository();
+        const useCase = new PlaceOrderUseCase({ clientAdm, productAdm, storeCatalogAdm, order, invoice, payment });
         const productId = new Id().toString();
         const productId2 = new Id().toString();
         const productId3 = new Id().toString();

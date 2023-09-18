@@ -7,7 +7,15 @@ describe("Add Client UseCase Unit Tests", () => {
        repo.add = jest.fn(() => Promise.resolve());
        const result = await new AddClientUseCase(repo).execute({
            name: "Client Name",
-           address: "Address",
+           address: {
+               number: '1',
+               zipCode: '1',
+               complement: 'complement',
+               city: 'city',
+               state: 'state',
+               street: 'street'
+           },
+           document: '1',
            email: "email@email.com"
        });
        expect(repo.add).toHaveBeenCalledTimes(1);

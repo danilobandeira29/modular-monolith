@@ -10,7 +10,7 @@ export default class Invoice extends Entity implements  AggregateRoot {
     private readonly _address: Address;
     private readonly _items: InvoiceItems[];
 
-    constructor(ctx: { id?: Id; name: string; document: string; address: Address; items: InvoiceItems[], createdAt: Date, updatedAt: Date }) {
+    constructor(ctx: { id?: Id; name: string; document: string; address: Address; items: InvoiceItems[], createdAt: Date, updatedAt?: Date }) {
         super(ctx?.id, ctx?.createdAt, ctx.updatedAt);
         this._name = ctx.name;
         this._document = ctx.document;

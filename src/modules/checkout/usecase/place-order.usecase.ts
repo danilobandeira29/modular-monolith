@@ -6,6 +6,13 @@ import Product from "../domain/product.entity";
 import Id from "../../@shared/domain/value-object/id-object";
 import Client from "../domain/client.entity";
 import Order from "../domain/order.entity";
+import {PaymentFacadeInterface} from "../../payment/facade/payment-facade.interface";
+import {CheckoutGateway} from "../gateway/checkout.gateway";
+import {InvoiceGatewayInterface} from "../../invoice/gateway/invoice.gateway";
+import Invoice from "../../invoice/domain/invoice";
+import InvoiceItems from "../../invoice/domain/invoice-items";
+import Address from "../../invoice/domain/address";
+import ClientAddress from "../../client-adm/domain/address"
 
 export default class PlaceOrderUseCase {
     constructor(
@@ -14,6 +21,9 @@ export default class PlaceOrderUseCase {
                 clientAdm: ClientAdmFacadeInterface,
                 productAdm: ProductAdmFacadeInterface,
                 storeCatalogAdm: StoreCatalogFacadeInterface
+                payment: PaymentFacadeInterface,
+                order: CheckoutGateway,
+                invoice: InvoiceGatewayInterface
             }) {}
 
     async execute(input: InputDtoPlaceOrder): Promise<OutputDtoPlaceOrder> {
@@ -24,7 +34,12 @@ export default class PlaceOrderUseCase {
         if (!input.products.length) {
             throw new Error("Products should be in Stock and Price greater than zero");
         }
-        const c = new Client({ id: new Id(client.id), email: client.email, name: client.name, address: client.address })
+        const c = new Client({
+            id: new Id(client.id),
+            email: client.email,
+            name: client.name,
+            address: new ClientAddress({city:client.address.city, number: client.address.number, state: client.address.state, zipCode: client.address.zipCode, street: client.address.street, complement: client.address.complement})
+        })
         const productsStock = await Promise.all(input.products.map(p =>
             this.facades.productAdm.checkStock({ productId: p.productId })
         ))
@@ -37,11 +52,28 @@ export default class PlaceOrderUseCase {
         }
         const productsCatalog = await Promise.all(productsStock.map(async p => this.facades.storeCatalogAdm.find({ id: p.productId })))
         const products = productsCatalog.map(p => new Product({ id: new Id(p.id), name: p.name, description: p.description, salesPrice: p.salesPrice }))
-        const order = new Order({ id: new Id(), client: c, products })
-        return {} as any;
-        // processar o pagamento -> utiliza facade de payment para isso
-        // caso pagamento seja aprovado, devemos gerar a fatura
-        // quando a fatura for gerada, vou mudar o status da order para approved
-        // return dto
+        const order = new Order({ id: new Id(), client: c, products });
+        const payment = await this.facades.payment.process({
+            orderId: order.id.toString(),
+            amount: order.total
+        })
+        const invoice = new Invoice({
+            id: new Id(),
+            address: new Address({ complement: client.address.complement, street: client.address.street, zipCode: client.address.zipCode, state: client.address.state,city: client.address.city, number: client.address.number}),
+            name: client.name,
+            createdAt: new Date(),
+            document: client.document,
+            items: products.map(p => new InvoiceItems({ id: p.id, name: p.name, createdAt: p.createdAt, price: p.salesPrice, updatedAt: p.updatedAt }))
+        })
+        payment.status === 'approved' && await this.facades.invoice.generate(invoice);
+        payment.status === 'approved' && order.approved();
+        await this.facades.order.addOrder(order);
+        return {
+            id: order.id.toString(),
+            status: order.status,
+            total: order.total,
+            invoiceId: payment.status === 'approved' ? invoice.id.toString() : null,
+            products: products.map(p => ({ productId: p.id.toString() }))
+        }
     }
 }

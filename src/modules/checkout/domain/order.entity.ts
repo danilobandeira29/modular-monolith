@@ -9,7 +9,7 @@ export default class Order extends Entity implements AggregateRoot {
     private readonly _products: Product[];
     private _status: string;
 
-    constructor(ctx: {id?: Id; client: Client; products: Product[]; status?: string}) {
+    constructor(ctx: {id?: Id; client: Client; products: Product[]; status?: string;}) {
         super(ctx?.id);
         this._client = ctx.client;
         this._products = ctx.products;

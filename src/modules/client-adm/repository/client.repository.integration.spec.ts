@@ -3,6 +3,7 @@ import {ClientModel} from "./client.model";
 import {Client} from "../domain/client.entity";
 import ClientRepository from "./client.repository";
 import Id from "../../@shared/domain/value-object/id-object";
+import Address from "../domain/address";
 
 describe("Client Repository Integration Tests", () => {
     let sequelize: Sequelize;
@@ -45,14 +46,15 @@ describe("Client Repository Integration Tests", () => {
         const client = new Client({
             id: new Id("1"),
             name: "Client Name",
-            address: "Address",
+            document: '1',
+            address: new Address({ street: 'street', zipCode: '1', city: 'city', complement: 'complement', number: '1', state: 'state' }),
             email: "email@email.com"
         })
         await new ClientRepository().add(client);
         const model = await ClientModel.findByPk("1");
         expect(model!.id.toString()).toStrictEqual("1");
         expect(model!.email).toStrictEqual("email@email.com");
-        expect(model!.address).toStrictEqual("Address");
+        expect(model!.street).toStrictEqual("street");
         expect(model!.name).toStrictEqual("Client Name");
         expect(model!.createdAt).toBeInstanceOf(Date);
         expect(model!.updatedAt).toBeInstanceOf(Date);

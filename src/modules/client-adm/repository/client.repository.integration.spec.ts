@@ -24,10 +24,16 @@ describe("Client Repository Integration Tests", () => {
     });
 
     it("should find a client", async () => {
-        const model = await ClientModel.create({
+        await ClientModel.create({
             id: "1",
             email: "email@email.com",
-            address: "Address",
+            street: "street",
+            city: "city",
+            state: "state",
+            complement: "complement",
+            zipCode: "1",
+            document: "1",
+            number: "1",
             name: "Client Name",
             createdAt: new Date(),
             updatedAt: new Date()
@@ -35,7 +41,7 @@ describe("Client Repository Integration Tests", () => {
         const result = await new ClientRepository().find({ id: "1" });
         expect(result.id.toString()).toStrictEqual("1");
         expect(result.email).toStrictEqual("email@email.com");
-        expect(result.address).toStrictEqual("Address");
+        expect(result.address.street).toStrictEqual("street");
         expect(result.name).toStrictEqual("Client Name");
         expect(result.createdAt).toBeInstanceOf(Date);
         expect(result.updatedAt).toBeInstanceOf(Date);

@@ -34,12 +34,6 @@ export default class PlaceOrderUseCase {
         if (!input.products.length) {
             throw new Error("Products should be in Stock and Price greater than zero");
         }
-        const c = new Client({
-            id: new Id(client.id),
-            email: client.email,
-            name: client.name,
-            address: new ClientAddress({city:client.address.city, number: client.address.number, state: client.address.state, zipCode: client.address.zipCode, street: client.address.street, complement: client.address.complement})
-        })
         const productsStock = await Promise.all(input.products.map(p =>
             this.facades.productAdm.checkStock({ productId: p.productId })
         ))
@@ -52,6 +46,12 @@ export default class PlaceOrderUseCase {
         }
         const productsCatalog = await Promise.all(productsStock.map(async p => this.facades.storeCatalogAdm.find({ id: p.productId })))
         const products = productsCatalog.map(p => new Product({ id: new Id(p.id), name: p.name, description: p.description, salesPrice: p.salesPrice }))
+        const c = new Client({
+            id: new Id(client.id),
+            email: client.email,
+            name: client.name,
+            address: new ClientAddress({city:client.address.city, number: client.address.number, state: client.address.state, zipCode: client.address.zipCode, street: client.address.street, complement: client.address.complement})
+        })
         const order = new Order({ id: new Id(), client: c, products });
         const payment = await this.facades.payment.process({
             orderId: order.id.toString(),

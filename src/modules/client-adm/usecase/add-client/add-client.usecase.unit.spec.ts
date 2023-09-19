@@ -21,7 +21,7 @@ describe("Add Client UseCase Unit Tests", () => {
        expect(repo.add).toHaveBeenCalledTimes(1);
        expect(result.id).toBeDefined();
        expect(result.name).toStrictEqual("Client Name");
-       expect(result.address).toStrictEqual("Address");
+       expect(result.address.street).toStrictEqual("street");
        expect(result.email).toStrictEqual("email@email.com");
        expect(result.createdAt).toBeInstanceOf(Date);
        expect(result.updatedAt).toBeInstanceOf(Date);

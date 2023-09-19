@@ -10,6 +10,10 @@ import {ProductModel} from "../../product-adm/repository/product.model";
 import PaymentFactory from "../../payment/factory/payment.factory";
 import InvoiceRepository from "../../invoice/repository/invoice.repository";
 import OrderRepository from "../repository/order.repository";
+import {TransactionModel} from "../../payment/repository/transaction.model";
+import InvoiceModel from "../../invoice/repository/invoice.model";
+import InvoiceItemsModel from "../../invoice/repository/invoice-items.model";
+import {OrderModel} from "../repository/order.model";
 
 describe("Place Order Integration Tests", () => {
     let sequelize: Sequelize;
@@ -21,7 +25,7 @@ describe("Place Order Integration Tests", () => {
             logging: false,
             sync: { force: true },
         });
-        sequelize.addModels([ClientModel, ProductCatalogModel, ProductModel]);
+        sequelize.addModels([ClientModel, ProductCatalogModel, ProductModel, TransactionModel, InvoiceModel, InvoiceItemsModel, OrderModel]);
         await sequelize.sync();
     });
 
@@ -42,7 +46,13 @@ describe("Place Order Integration Tests", () => {
         const order = new OrderRepository();
         const useCase = new PlaceOrderUseCase({ clientAdm, productAdm, storeCatalogAdm, payment, invoice, order });
         const result = await useCase.execute({ clientId: clientId, products: [{productId}] });
-        expect(result).toStrictEqual({});
+        expect(result).toStrictEqual({
+            id: expect.any(String),
+            invoiceId: expect.any(String),
+            products: [{ productId: expect.any(String) }],
+            status: "approved",
+            total: 100
+        });
     })
 
     it("should throw errors when products are empty", async () => {

@@ -1,5 +1,5 @@
 import Transaction from "../domain/transaction";
-import TransactionModel from "./transaction.model";
+import {TransactionModel} from "./transaction.model";
 import {PaymentGatewayInterface} from "../gateway/payment.gateway.interface";
 
 export default class TransactionRepository implements PaymentGatewayInterface {
